@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react'
 import type { ColumnDef, RowActionRenderer } from './types'
 import { useDataTable } from './useDataTable'
+import { useColumnConfiguration } from './useColumnConfiguration'
+import { ColumnConfiguration } from './ColumnConfiguration'
 
-export interface DataTableProps<TData extends Record<string, unknown>> {
+export interface DataTableProps<TData extends object> {
   data: TData[]
   columns: ColumnDef<TData>[]
   pageSize?: number
@@ -15,9 +17,11 @@ export interface DataTableProps<TData extends Record<string, unknown>> {
   emptyState?: ReactNode
   loading?: boolean
   error?: string | null
+  tableId?: string
+  enableColumnConfiguration?: boolean
 }
 
-export const DataTable = <TData extends Record<string, unknown>>({
+export const DataTable = <TData extends object>({
   data,
   columns,
   pageSize,
@@ -27,6 +31,8 @@ export const DataTable = <TData extends Record<string, unknown>>({
   emptyState,
   loading,
   error,
+  tableId,
+  enableColumnConfiguration = false,
 }: DataTableProps<TData>) => {
   const {
     rows,
@@ -43,6 +49,16 @@ export const DataTable = <TData extends Record<string, unknown>>({
     requestSort,
   } = useDataTable<TData>({ data, columns, pageSize, initialSort })
 
+  const {
+    visibleColumns,
+    columnVisibility,
+    toggleColumnVisibility,
+    resetColumnVisibility
+  } = useColumnConfiguration({
+    columns,
+    tableId
+  })
+
   if (loading) {
     return <div className="datatable__empty">Loading data…</div>
   }
@@ -55,6 +71,15 @@ export const DataTable = <TData extends Record<string, unknown>>({
 
   return (
     <div className="card">
+      {enableColumnConfiguration && (
+        <ColumnConfiguration
+          columns={columns}
+          columnVisibility={columnVisibility}
+          onToggleColumn={toggleColumnVisibility}
+          onResetColumns={resetColumnVisibility}
+        />
+      )}
+
       {(toolbar || hasSearchableColumns) && (
         <div className="datatable__toolbar">
           {toolbar}
@@ -75,7 +100,7 @@ export const DataTable = <TData extends Record<string, unknown>>({
         <table className="datatable">
           <thead>
             <tr>
-              {columns.map((column) => {
+              {visibleColumns.map((column) => {
                 const isSorted = sort?.columnId === column.id
                 return (
                   <th
@@ -95,9 +120,9 @@ export const DataTable = <TData extends Record<string, unknown>>({
           <tbody>
             {rows.map((row, index) => (
               <tr key={`datatable-row-${index}`}>
-                {columns.map((column) => (
+                {visibleColumns.map((column) => (
                   <td key={`${column.id}-${index}`} style={{ textAlign: column.align ?? 'left' }}>
-                    {column.cell ? column.cell(row) : String(row[column.accessorKey] ?? '')}
+                    {column.cell ? column.cell(row) : column.accessor ? String(row[column.accessor] ?? '') : ''}
                   </td>
                 ))}
                 {actionsRenderer && <td className="datatable__actions">{actionsRenderer(row)}</td>}

@@ -18,7 +18,7 @@ export const authenticate = async ({ email }: LoginRequest): Promise<LoginRespon
       id: 'u-001',
       name: 'Ava Martinez',
       email,
-      role: email.includes('finance') ? 'finance' : 'admin',
+      role: email.includes('manager') ? 'manager' : email.includes('viewer') ? 'viewer' : 'admin',
     },
   })
 }

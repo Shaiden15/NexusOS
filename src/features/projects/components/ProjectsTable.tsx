@@ -8,20 +8,20 @@ interface ProjectsTableProps {
 }
 
 const columns: ColumnDef<Project>[] = [
-  { id: 'name', header: 'Project', accessorKey: 'name', sortable: true },
-  { id: 'owner', header: 'Owner', accessorKey: 'owner', sortable: true },
-  { id: 'status', header: 'Status', accessorKey: 'status' },
+  { id: 'name', header: 'Project', accessor: 'name', sortable: true },
+  { id: 'owner', header: 'Owner', accessor: 'owner', sortable: true },
+  { id: 'status', header: 'Status', accessor: 'status' },
   {
     id: 'budget',
     header: 'Budget',
-    accessorKey: 'budget',
+    accessor: 'budget',
     sortable: true,
     cell: (project) => formatCurrency(project.budget),
   },
   {
     id: 'updatedAt',
     header: 'Updated',
-    accessorKey: 'updatedAt',
+    accessor: 'updatedAt',
     sortable: true,
     cell: (project) => formatDate(project.updatedAt),
   },
@@ -34,5 +34,7 @@ export const ProjectsTable = ({ data }: ProjectsTableProps) => (
     pageSize={5}
     initialSort={{ columnId: 'updatedAt', direction: 'desc' }}
     emptyState="No projects available."
+    tableId="projects-table"
+    enableColumnConfiguration={true}
   />
 )

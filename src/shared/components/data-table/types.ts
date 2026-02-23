@@ -7,12 +7,13 @@ export type AccessorKey<TData> = Extract<keyof TData, string>
 export interface ColumnDef<TData> {
   id: string
   header: string
-  accessorKey: AccessorKey<TData>
+  accessor?: keyof TData
   sortable?: boolean
   searchable?: boolean
   width?: string | number
   align?: 'left' | 'center' | 'right'
   cell?: (row: TData) => ReactNode
+  hidden?: boolean
 }
 
 export interface SortState {
@@ -21,3 +22,7 @@ export interface SortState {
 }
 
 export type RowActionRenderer<TData> = (row: TData) => ReactNode
+
+export interface ColumnVisibilityState {
+  [columnId: string]: boolean
+}

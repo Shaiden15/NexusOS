@@ -1,6 +1,7 @@
 import { type StateCreator, create } from 'zustand'
 import { registerTokenProvider } from '@services/apiClient'
 import type { UserProfile } from '@nexus-types/user'
+import type { UserRole } from '@shared/types/auth'
 
 export type ThemeMode = 'light' | 'dark'
 
@@ -10,6 +11,7 @@ interface AuthSlice {
   isAuthenticated: boolean
   login: (payload: { user: UserProfile; token: string }) => void
   logout: () => void
+  hasRole: (role: UserRole) => boolean
 }
 
 interface ThemeSlice {
@@ -35,7 +37,7 @@ const persistTheme = (mode: ThemeMode) => {
   }
 }
 
-const createAuthSlice: StateCreator<AppStore, [], [], AuthSlice> = (set) => ({
+const createAuthSlice: StateCreator<AppStore, [], [], AuthSlice> = (set, get) => ({
   user: null,
   token: null,
   isAuthenticated: false,
@@ -51,6 +53,10 @@ const createAuthSlice: StateCreator<AppStore, [], [], AuthSlice> = (set) => ({
       token: null,
       isAuthenticated: false,
     })),
+  hasRole: (role: UserRole) => {
+    const { user } = get()
+    return user?.role === role
+  },
 })
 
 const createThemeSlice: StateCreator<AppStore, [], [], ThemeSlice> = (set, get) => ({

@@ -3,6 +3,7 @@ import { lazy } from 'react'
 import { ROUTES } from '@constants/routes'
 import { AppLayout } from '@shared/layout/AppLayout'
 import { ProtectedRoute } from '@shared/components/ProtectedRoute'
+import { RoleGuard } from '@shared/components/RoleGuard'
 
 const ProjectsRoute = lazy(() => import('@features/projects'))
 const FinanceRoute = lazy(() => import('@features/finance'))
@@ -26,7 +27,11 @@ export const appRouter = createBrowserRouter([
           { path: toSegment(ROUTES.finance), element: <FinanceRoute /> },
           { path: toSegment(ROUTES.analytics), element: <AnalyticsRoute /> },
           { path: toSegment(ROUTES.users), element: <UsersRoute /> },
-          { path: toSegment(ROUTES.settings), element: <SettingsRoute /> },
+          { path: toSegment(ROUTES.settings), element: (
+            <RoleGuard allowed={["admin"]}>
+              <SettingsRoute />
+            </RoleGuard>
+          ) },
         ],
       },
     ],

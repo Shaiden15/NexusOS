@@ -25,10 +25,10 @@ export interface UseDataTableResult<TData> {
   requestSort: (columnId: string) => void
 }
 
-type Accessor<TData> = ColumnDef<TData>['accessorKey']
+type Accessor<TData> = ColumnDef<TData>['accessor']
 
 const getCellValue = <TData,>(row: TData, accessor: Accessor<TData>) =>
-  (row as Record<string, unknown>)[accessor]
+  accessor ? (row as any)[accessor] : undefined
 
 const toComparable = (value: unknown) => {
   if (value == null) return ''
@@ -59,8 +59,8 @@ export const useDataTable = <TData,>({
   const searchableColumns = useMemo(
     () =>
       columns
-        .filter((column) => column.searchable !== false)
-        .map((column) => column.accessorKey as Accessor<TData>),
+        .filter((column) => column.searchable !== false && column.accessor)
+        .map((column) => column.accessor as Accessor<TData>),
     [columns],
   )
 
@@ -78,8 +78,8 @@ export const useDataTable = <TData,>({
 
     if (sort) {
       const column = columns.find((candidate) => candidate.id === sort.columnId && candidate.sortable)
-      if (column) {
-        const accessor = column.accessorKey as Accessor<TData>
+      if (column && column.accessor) {
+        const accessor = column.accessor as Accessor<TData>
         rows = [...rows].sort((a, b) =>
           compareValues(getCellValue(a, accessor), getCellValue(b, accessor), sort.direction),
         )
