@@ -1,4 +1,4 @@
-import type { UserProfile } from '@nexus-types/user'
+import type { UserProfile } from '@shared/types/user'
 
 interface LoginRequest {
   email: string

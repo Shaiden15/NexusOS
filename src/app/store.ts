@@ -1,6 +1,6 @@
 import { type StateCreator, create } from 'zustand'
 import { registerTokenProvider } from '@services/apiClient'
-import type { UserProfile } from '@nexus-types/user'
+import type { UserProfile } from '@shared/types/user'
 import type { UserRole } from '@shared/types/auth'
 
 export type ThemeMode = 'light' | 'dark'

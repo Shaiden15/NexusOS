@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { PRIMARY_NAV } from '@constants/navigation'
+import { PRIMARY_NAV } from '@app/constants/navigation'
 import { useAppStore } from '@app/store'
 
 export const AppSidebar = () => {

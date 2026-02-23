@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { authenticate } from '../api/authApi'
 import { useAuth } from '@shared/hooks/useAuth'
-import { ROUTES } from '@constants/routes'
+import { ROUTES } from '@app/constants/routes'
 
 const schema = z.object({
   email: z.string().email(),

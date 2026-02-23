@@ -1,4 +1,4 @@
-import type { UserRole } from '@shared/types/auth'
+import type { UserRole } from './auth'
 
 export interface UserProfile {
   id: string

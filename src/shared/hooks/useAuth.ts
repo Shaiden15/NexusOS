@@ -4,7 +4,7 @@ import {
   selectUser,
   useAppStore,
 } from '@app/store'
-import type { UserProfile } from '@nexus-types/user'
+import type { UserProfile } from '@shared/types/user'
 
 export const useAuth = () => {
   const isAuthenticated = useAppStore(selectIsAuthenticated)

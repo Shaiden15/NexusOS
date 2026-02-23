@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { lazy } from 'react'
-import { ROUTES } from '@constants/routes'
+import { ROUTES } from './constants/routes'
 import { AppLayout } from '@shared/layout/AppLayout'
 import { ProtectedRoute } from '@shared/components/ProtectedRoute'
 import { RoleGuard } from '@shared/components/RoleGuard'
