@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# NexusOS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript dashboard powered by Vite 7.3 with feature-based file structure, Zustand state, and React Router 7. Deploy-ready via static site hosts.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js 20+
+- npm 10+
+- No runtime environment variables are required for the current build.
 
-## React Compiler
+## Local development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Production build
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Deployment
+
+### Vercel
+
+Configuration lives in `vercel.json` and outputs static assets from `dist/`.
+
+1. Install the [Vercel CLI](https://vercel.com/docs/cli) and log in: `npm i -g vercel && vercel login`.
+2. From the repo root run `vercel` to create the project (select **Framework Preset: Vite** if prompted).
+3. For subsequent deployments use `vercel --prod` (build command: `npm run build`, output: `dist`).
+4. SPA routing is handled by the rewrite rule forwarding every path to `/index.html`.
+
+### Netlify
+
+`netlify.toml` contains equivalent settings.
+
+1. Install the [Netlify CLI](https://docs.netlify.com/cli/get-started/): `npm i -g netlify-cli` and run `netlify login`.
+2. Link the site: `netlify init` (build command `npm run build`, publish directory `dist`).
+3. Deploy previews with `netlify deploy --build --prod` or enable continuous deployment from GitHub.
+4. The redirect in `netlify.toml` ensures SPA routes resolve to `index.html` with 200 status.
+
+### Custom hosts / static storage
+
+1. Run `npm run build`.
+2. Upload the contents of `dist/` to your static host (S3 + CloudFront, Azure Static Web Apps, etc.).
+3. Configure the host to serve `index.html` for all unmatched routes to support React Router.
+
+## Linting
+
+```bash
+npm run lint
+```
+
+ESLint is configured via `eslint.config.js`; adjust extends/rules as needed for production hardening.
